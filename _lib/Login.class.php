@@ -12,7 +12,7 @@ class Login
 			$user = User::getUser($username,$password);
 		}
 	}
-	public static function renderPage()
+	public static function renderContent()
 	{
 		include "_doc/login.tpl.php";
 	}
