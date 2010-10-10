@@ -1,12 +1,12 @@
 <?php
 class ExerciseForm
 {
-	private var $name;
-	private var $weightmin;
-	private var $weighmax;
-	private var $repmin;
-	private var $repmax;
-	private var $id;
+	private $name;
+	private $weightmin;
+	private $weighmax;
+	private $repmin;
+	private $repmax;
+	private $id;
 	
 	public function ExerciseForm($formData,$id)
 	{
