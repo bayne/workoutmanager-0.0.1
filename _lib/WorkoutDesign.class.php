@@ -10,21 +10,32 @@ class WorkoutDesign extends Controller
 		if(isset($_POST['exercises']))
 		{
 			$exerciseForms = $_POST['exercises'];
-			$exercises = array();
+			$user = unserialize($_SESSION['user']);
+			//$exercises = array();
+			$workout = new Workout($user);
 			$invalidForms = array();
 			foreach($exerciseForms as $id => $exerciseFormData)
 			{
 				$exerciseForm = new ExerciseForm($exerciseFormData,$id);
-				if ($exerciseForm->isValid())
+				if (!$exerciseForm->isValid())
 				{
-					$exercise = new Exercise($exerciseForm);
-				}
-				else
-				{
+					//$exercises[] = new Exercise($exerciseForm);
 					$invalidForms[] = $exerciseForm;
 				}
+				$workout->addExercise($exerciseForm);
+			}
+
+			if(count($invalidForms) > 0)
+			{
+				//print errors
+			}
+			else
+			{
+				$workout->save();
 			}
 		}
+
+
 	}
 	public static function getScripts()
 	{

@@ -2,26 +2,40 @@
 require_once('DB.class.php');
 class User
 {
+	private $name;
+	private $passwordHash;
+	private $userid;
 	public function User($name,$password)
 	{
 		DB::conn();
-		$cleaned_name = mysql_real_escape_string($name);
-		$passwordHash = sha1($password);
-		$sql = sprintf("INSERT INTO 'users' ('username','password') VALUES ('%s','%s');",
-				$cleaned_name,
-				$passwordHash);
-		$result = mysql_query($sql);
+		$this->name = mysql_real_escape_string($name);
+		$this->passwordHash = sha1($password);
 	}
-	public static function getUser($name,$password)
+	public function create()
 	{
-		DB::conn();
-		$cleaned_name = mysql_real_escape_string($name);
-		$passwordHash = sha1($password);
-		$sql = sprintf("SELECT id,username FROM 'users' WHERE username='%s' AND password='%s';",
-				$cleaned_name,
-				$passwordHash);
-		$result = mysql_query($sql);
-		echo $result;
+		$sql = sprintf("INSERT INTO users (username,password) VALUES ('%s','%s');",
+				$this->name,
+				$this->passwordHash);
+		$result = DB::query($sql);
+		$this->read();
+		echo(mysql_error());
 		return $result;
+	}
+	public function read()
+	{
+		$sql = sprintf("SELECT id,username FROM users WHERE username='%s' AND password='%s';",
+				$this->name,
+				$this->passwordHash);
+		$result = mysql_query($sql);
+		$this->userid = $result[0];
+		return $result;
+	}
+	public function update()
+	{
+		
+	}
+	public function delete()
+	{
+		
 	}
 }
