@@ -12,18 +12,29 @@ class WorkoutList
 		$this->user = $user;
 		$this->workouts = array();
 	}
+	public function get_workouts()
+	{
+		return $this->workouts;
+	}
 	public function create()
 	{
 			
 	}
 	public function read()
 	{
-		$sql = sprintf("SELECT * FROM workouts WHERE userid='%s'",$this->user->get_user_id());
+		$sql = sprintf("SELECT * FROM workouts WHERE userid='%s'",$this->user->name);
 		$result = DB::query($sql);
-		$rows = mysql_fetch_assoc($result);
-		for($rows as $row)
+		if($result)
 		{
-			$workouts[] = new Workout($row);
+			$rows = mysql_fetch_assoc($result);
+			foreach($rows as $row)
+			{
+				$workouts[] = new Workout($row);
+			}
+		}
+		else
+		{
+			//no workouts
 		}
 
 	}

@@ -26,8 +26,8 @@ class Workout
 	}
 	public function create()
 	{
-		$sql = sprintf("INSERT INTO workout (user_id,workout_name) VALUES ('%s''%s')",
-				$this->user->get_id(),
+		$sql = sprintf("INSERT INTO workouts (user_id,name) VALUES ('%s''%s')",
+				$this->user->userid,
 				$this->name);
 		foreach($exercises as $exercise)
 		{
@@ -37,7 +37,7 @@ class Workout
 	}
 	public function read()
 	{
-		$sql = sprintf("SELECT * FROM workout WHERE user_id='%s'",$this->user->get_id());
+		$sql = sprintf("SELECT * FROM workouts WHERE user_id='%s'",$this->user->get_id());
 		$result = DB::query($sql);
 		$row = mysql_fetch_assoc($result);
 		$result[]

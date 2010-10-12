@@ -2,9 +2,9 @@
 require_once('DB.class.php');
 class User
 {
-	private $name;
-	private $passwordHash;
-	private $userid;
+	var $name;
+	var $passwordHash;
+	var $userid;
 	public function User($name,$password)
 	{
 		DB::conn();
@@ -27,8 +27,15 @@ class User
 				$this->name,
 				$this->passwordHash);
 		$result = mysql_query($sql);
-		$this->userid = $result[0];
-		return $result;
+		if(mysql_num_rows($result))
+		{
+			$row = mysql_fetch_assoc($result);
+			$this->name = $row['username'];
+			$this->userid = $row['id'];
+			return true;
+		}
+		else
+			return false;
 	}
 	public function update()
 	{

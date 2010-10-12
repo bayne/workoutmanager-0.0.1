@@ -34,8 +34,6 @@ class WorkoutDesign extends Controller
 				$workout->save();
 			}
 		}
-
-
 	}
 	public static function getScripts()
 	{

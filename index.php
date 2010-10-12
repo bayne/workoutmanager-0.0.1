@@ -4,6 +4,7 @@ require_once('_lib/Login.class.php');
 require_once('_lib/WorkoutDesign.class.php');
 require_once('_lib/Register.class.php');
 require_once('_lib/Page.class.php');
+require_once('_lib/WorkoutListing.class.php');
 session_start();
 $styles = array();
 $scripts = array('_doc/js/jquery.js');
@@ -14,10 +15,15 @@ $do = $_GET['do'];
 if(isset($_SESSION['user']))
 {
 	$user = unserialize($_SESSION['user']);
+	echo 'logged in as:'.$user->name;
 }
-else if($do != 'login')
+else
 {
-	//header('Location: /?do=login');
+	echo 'not logged in';
+	if($do != 'login')
+	{
+		//header('Location: /?do=login');
+	}
 }
 switch($do)
 {
@@ -27,21 +33,26 @@ switch($do)
 		$styles[] = Login::getStyles();
 		$scripts[] = Login::getScripts();
 	break;
+	case 'logout':
+		session_destroy();
+	break;
 	case 'design':
-	WorkoutDesign::process();
+		WorkoutDesign::process();
 		$content = WorkoutDesign::renderContent();
 		$styles[] = WorkoutDesign::getStyles();
 		$scripts[] = WorkoutDesign::getScripts();
 	break;
 	case 'register':
 		Register::process();
+		$styles[] = WorkoutDesign::getStyles();
 		$content = Register::renderContent();
 	break;
 	case 'list':
-		WorkoutList::process();
-		$content = WorkoutList::renderContent();
+		WorkoutListing::process();
+		$content = WorkoutListing::renderContent();
+	break;
 	default:
-	echo 'bad';
+		echo 'bad';
 	break;
 }
 
