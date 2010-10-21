@@ -1,19 +1,37 @@
 <?php
+require_once('_lib/DB.class.php');
 class Exercise
 {
-	private var $name;
-	private var $sets;
-	public function Exercise($exerciseForm)
+	private $workout_id;
+	private $name;
+	private $setcount;
+	private $repmin;
+	private $repmax;
+	private $weightmin;
+	private $weightmax;
+
+	public function __construct($workout_id,$name,$setcount,$repmin,$repmax,$weightmin,$weightmax)
 	{
-		$this->name = $exerciseForm['name'];
-		$this->sets = array();
-		foreach(range(0,$exerciseForm['setcount']) as $i)
-		{
-			$reprange = array($exerciseForm['repmin'],$exerciseForm['repmax']);
-			$weightrange = array($exerciseForm['weightmin'],$exerciseForm['weightmax']);
-			$sets[] = new Set($reprange,$weightrange);
-		}
+		 $this->workout_id = $workout_id;
+		 $this->name = $name;
+		 $this->setcount = $setcount;
+		 $this->repmin = $repmin;
+		 $this->repmax = $repmax;
+		 $this->weightmin = $weightmin;
+		 $this->weightmax = $weightmax;
 	}
-	
+	public function create()	
+	{
+		//TODO clean output
+		$sql = sprintf("INSERT INTO exercises (workout_id,name,rep_min,rep_max,weight_min,weight_max,number_of_sets) VALUES ('%s','%s','%s','%s','%s','%s','%s')",
+						$this->workout_id,
+						$this->name,
+						$this->setcount,
+						$this->repmin,
+						$this->repmax,
+						$this->weightmin,
+						$this->weightmax);
+		return DB::query($sql);
+	}
 }
 ?>

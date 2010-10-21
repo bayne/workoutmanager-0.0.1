@@ -1,29 +1,33 @@
 <?php
 require_once('_lib/ExerciseForm.class.php');
 require_once('_lib/Controller.class.php');
+require_once('_lib/Workout.class.php');
 class WorkoutDesign extends Controller
 {
-	private static $exerciseForms;
+	private static $exercise_forms;
 	private static $workout;
 	public static function process()
 	{
-		self::$exerciseForms = array();
+		self::$exercise_forms = array();
 
 		if(isset($_GET['workout']))
 		{
-			$id = $_GET['workout']
+			$id = $_GET['workout'];
 			self::$workout = new Workout($user,$id);
-			self::$exerciseForms = $workout->getExerciseForms();
+			self::$exercise_forms = self::$workout->getExerciseForms();
 		}
 
 		if(isset($_POST['exercises']))
 		{
-			$exerciseForms = $_POST['exercises'];
+			$exercise_forms = $_POST['exercises'];
+			print_r($exercise_forms);
 			$user = unserialize($_SESSION['user']);
+			print_r($user);
 			//$exercises = array();
 			self::$workout = new Workout($user);
+			print_r(self::$workout);
 			$invalidForms = array();
-			foreach($exerciseForms as $id => $exerciseFormData)
+			foreach($exercise_forms as $id => $exerciseFormData)
 			{
 				$exerciseForm = new ExerciseForm($exerciseFormData,$id);
 				if (!$exerciseForm->isValid())
@@ -33,18 +37,19 @@ class WorkoutDesign extends Controller
 				}
 				self::$workout->addExercise($exerciseForm);
 			}
-
+			print_r(self::$workout);
 			if(count($invalidForms) > 0)
 			{
 				//print errors
 			}
 			else
 			{
-				if(self::$workout->id!=-1)
-					self::$workout->update();
-				else
-					self::$workout->create();
+				// if(self::$workout->id!=-1)
+				// 	self::$workout->update();
+				// else
+				// 	self::$workout->create();
 			}
+			die();
 		}
 	}
 	public static function getScripts()
@@ -55,7 +60,7 @@ class WorkoutDesign extends Controller
 	{
 		ob_start();
 		$emptyExerciseForm = new ExerciseForm();
-		$exerciseForms = self::$exerciseForms;
+		$exercise_forms = self::$exercise_forms;
 		include '_doc/workout_designer.tpl.php';
 		$content = ob_get_contents();
 		ob_end_clean();

@@ -1,4 +1,5 @@
 <?php
+//TODO Remove this and use as array
 class ExerciseForm
 {
 	private $name;
@@ -8,7 +9,7 @@ class ExerciseForm
 	private $repmax;
 	private $id;
 	
-	public function ExerciseForm($formData=null,$id=0)
+	public function __construct($formData=null,$id=0)
 	{
 		if(isset($formData))
 		{
