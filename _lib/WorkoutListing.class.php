@@ -12,7 +12,7 @@ class WorkoutListing extends Controller
 	}	
 	public static function renderContent()
 	{
-		$workouts = self::$workoutList->get_workouts();
+		$workouts = self::$workoutList->workouts;
 		ob_start();
 		include '_doc/workout_list.tpl.php';
 		$content = ob_get_clean();

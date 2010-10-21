@@ -6,7 +6,7 @@ class Workout
 	private var $exercises;
 	private var $user;
 	private var $name;
-	public function Workout($user,$exercises = array())
+	public function Workout($user,$id = -1)
 	{
 		DB::conn();
 		$this->exercises = $exercises;
@@ -26,7 +26,7 @@ class Workout
 	}
 	public function create()
 	{
-		$sql = sprintf("INSERT INTO workouts (user_id,name) VALUES ('%s''%s')",
+		$sql = sprintf("INSERT INTO workouts (user_id,workout_name) VALUES ('%s','%s')",
 				$this->user->userid,
 				$this->name);
 		foreach($exercises as $exercise)
@@ -37,13 +37,21 @@ class Workout
 	}
 	public function read()
 	{
-		$sql = sprintf("SELECT * FROM workouts WHERE user_id='%s'",$this->user->get_id());
+		//get the workout name and the exercises associated with the workout id
+		$sql = sprintf("SELECT workout_name FROM workouts WHERE id='%s'",$this->id);
 		$result = DB::query($sql);
 		$row = mysql_fetch_assoc($result);
-		$result[]
+		$sql = sprintf("SELECT * FROM exercises WHERE workout_id='%s'",$this->id)
+		$result = DB::query($sql);
+		$rows = mysql_fetch_assoc($result);
+		$this->exercises = $rows;
+		
 	}
 	public function update()
 	{
+		$sql = sprintf("UPDATE workouts SET (user_id,workout_name) VALUES ('%s','%s')",
+				$this->user->userid,
+				$this->name);
 		
 	}
 	public function delete()

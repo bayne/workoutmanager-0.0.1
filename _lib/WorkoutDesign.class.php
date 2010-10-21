@@ -4,15 +4,24 @@ require_once('_lib/Controller.class.php');
 class WorkoutDesign extends Controller
 {
 	private static $exerciseForms;
+	private static $workout;
 	public static function process()
 	{
 		self::$exerciseForms = array();
+
+		if(isset($_GET['workout']))
+		{
+			$id = $_GET['workout']
+			self::$workout = new Workout($user,$id);
+			self::$exerciseForms = $workout->getExerciseForms();
+		}
+
 		if(isset($_POST['exercises']))
 		{
 			$exerciseForms = $_POST['exercises'];
 			$user = unserialize($_SESSION['user']);
 			//$exercises = array();
-			$workout = new Workout($user);
+			self::$workout = new Workout($user);
 			$invalidForms = array();
 			foreach($exerciseForms as $id => $exerciseFormData)
 			{
@@ -22,7 +31,7 @@ class WorkoutDesign extends Controller
 					//$exercises[] = new Exercise($exerciseForm);
 					$invalidForms[] = $exerciseForm;
 				}
-				$workout->addExercise($exerciseForm);
+				self::$workout->addExercise($exerciseForm);
 			}
 
 			if(count($invalidForms) > 0)
@@ -31,7 +40,10 @@ class WorkoutDesign extends Controller
 			}
 			else
 			{
-				$workout->save();
+				if(self::$workout->id!=-1)
+					self::$workout->update();
+				else
+					self::$workout->create();
 			}
 		}
 	}

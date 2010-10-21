@@ -5,3 +5,6 @@
 		<?php }								 	?>
 	</li>
 </ul>
+<div>
+<a href="?do=design">New Workout</a>
+</div>

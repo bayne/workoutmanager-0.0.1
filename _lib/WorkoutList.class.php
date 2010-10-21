@@ -3,7 +3,7 @@ require_once('_lib/User.class.php');
 require_once('_lib/DB.class.php');
 class WorkoutList
 {
-	private $workouts;
+	var $workouts;
 	private $user;
 
 	public function WorkoutList($user)
@@ -11,10 +11,6 @@ class WorkoutList
 		DB::conn();
 		$this->user = $user;
 		$this->workouts = array();
-	}
-	public function get_workouts()
-	{
-		return $this->workouts;
 	}
 	public function create()
 	{
