@@ -12,6 +12,7 @@ class Workout
 		DB::conn();
 		$this->exercises = $exercises;
 		$this->user = $user;
+		$this->id = $id;
 	}
 
 	public function getExerciseForms()
@@ -25,6 +26,10 @@ class Workout
 		$content = ob_get_contents();
 		ob_end_clean();
 		return $content;
+	}
+	public function get_id()
+	{
+		return $this->id;
 	}
 	public function addExercise($exercise_form)
 	{
@@ -41,7 +46,7 @@ class Workout
 		$sql = sprintf("INSERT INTO workouts (user_id,workout_name) VALUES ('%s','%s')",
 				$this->user->userid,
 				$this->name);
-		foreach($exercises as $exercise)
+		foreach($this->exercises as $exercise)
 		{
 			$exercise->create();
 		}
@@ -64,7 +69,12 @@ class Workout
 		$sql = sprintf("UPDATE workouts SET (user_id,workout_name) VALUES ('%s','%s')",
 				$this->user->userid,
 				$this->name);
-		
+		foreach($this->exercises as $exercise)
+		{
+			//TODO handle updates right now it just updates ones that already exist
+			$exercise->update();
+		}
+		return DB::query($sql);
 	}
 	public function delete()
 	{

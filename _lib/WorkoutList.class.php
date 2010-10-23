@@ -25,7 +25,7 @@ class WorkoutList
 			$rows = mysql_fetch_assoc($result);
 			foreach($rows as $row)
 			{
-				$workouts[] = new Workout($row);
+				$this->workouts[] = new Workout($row);
 			}
 		}
 		else

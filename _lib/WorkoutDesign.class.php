@@ -1,55 +1,53 @@
 <?php
-require_once('_lib/ExerciseForm.class.php');
 require_once('_lib/Controller.class.php');
 require_once('_lib/Workout.class.php');
+require_once('_lib/Validate.class.php');
 class WorkoutDesign extends Controller
 {
 	private static $exercise_forms;
 	private static $workout;
 	public static function process()
 	{
-		self::$exercise_forms = array();
+		self::$exercise_forms = array(0=>array());
 
 		if(isset($_GET['workout']))
 		{
 			$id = $_GET['workout'];
 			self::$workout = new Workout($user,$id);
+			self::$workout->read();
 			self::$exercise_forms = self::$workout->getExerciseForms();
+		}
+		else
+		{
+			die();
 		}
 
 		if(isset($_POST['exercises']))
 		{
-			$exercise_forms = $_POST['exercises'];
-			print_r($exercise_forms);
+			self::$exercise_forms = $_POST['exercises'];
 			$user = unserialize($_SESSION['user']);
-			print_r($user);
 			//$exercises = array();
-			self::$workout = new Workout($user);
-			print_r(self::$workout);
-			$invalidForms = array();
-			foreach($exercise_forms as $id => $exerciseFormData)
+			$invalid_forms = array();
+			foreach(self::$exercise_forms as $id => $exercise_form)
 			{
-				$exerciseForm = new ExerciseForm($exerciseFormData,$id);
-				if (!$exerciseForm->isValid())
+				if (!Validate::exercise_form($execise_form))
 				{
-					//$exercises[] = new Exercise($exerciseForm);
-					$invalidForms[] = $exerciseForm;
+					$invalid_forms[] = $exercise_form;
 				}
-				self::$workout->addExercise($exerciseForm);
+				self::$workout->addExercise($exercise_form);
 			}
-			print_r(self::$workout);
-			if(count($invalidForms) > 0)
+			if(count($invalid_forms) > 0)
 			{
 				//print errors
 			}
 			else
 			{
-				// if(self::$workout->id!=-1)
-				// 	self::$workout->update();
-				// else
-				// 	self::$workout->create();
+				if(self::$workout->get_id()!=-1)
+					self::$workout->update();
+				else
+					self::$workout->create();
 			}
-			die();
+			
 		}
 	}
 	public static function getScripts()
@@ -59,7 +57,6 @@ class WorkoutDesign extends Controller
 	public static function renderContent()
 	{
 		ob_start();
-		$emptyExerciseForm = new ExerciseForm();
 		$exercise_forms = self::$exercise_forms;
 		include '_doc/workout_designer.tpl.php';
 		$content = ob_get_contents();

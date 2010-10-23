@@ -5,7 +5,10 @@ class DB
 	private static $db;
 	public static function query($sql)
 	{
-		return mysql_query($sql,self::$db);
+		$result = mysql_query($sql,self::$db);
+		echo "Query: $sql <br/>";
+		echo "Result: $result <br/>";
+		return $result;
 	}
 	public static function conn()
 	{
