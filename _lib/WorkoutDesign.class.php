@@ -8,24 +8,38 @@ class WorkoutDesign extends Controller
 	private static $workout;
 	public static function process()
 	{
+		if(isset($_GET['edit']))
+		{
+			$id = $_GET['workout'];
+			if(empty($id))
+			{
+				die("empty id");
+			}
+		}
+		else if(isset($_GET['save']))
+		{
+			
+		}
+	}
+	public static function process()
+	{
 		$user = unserialize($_SESSION['user']);
 		if(isset($_GET['workout']))
 		{
 			//TODO make sure user has permission to edit this workout
 			$id = $_GET['workout'];
 			self::$workout = new Workout($user,$id);
-			self::$workout->read();
-			self::$exercise_forms = self::$workout->getExerciseForms();
 		}
 		else
 		{
 			self::$workout = new Workout($user);
-			self::$workout->read();
+			self::$workout->is_new = true;
 			self::$exercise_forms = array(0=>array());
 		}
 		if(isset($_POST['exercises']))
 		{
 			self::$exercise_forms = $_POST['exercises'];
+
 			//$exercises = array();
 			$invalid_forms = array();
 			foreach(self::$exercise_forms as $id => $exercise_form)
@@ -43,15 +57,16 @@ class WorkoutDesign extends Controller
 			else
 			{
 				if(self::$workout->is_new())
-				{
 					self::$workout->create();
-
-				}
 				else
 					self::$workout->update();
 				//header("Location: ?do=list");
 			}
-			
+		}
+		else
+		{
+			self::$workout->read();
+			self::$exercise_forms = self::$workout->getExerciseForms();
 		}
 	}
 	public static function getScripts()

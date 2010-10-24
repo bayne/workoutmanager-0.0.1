@@ -1,4 +1,5 @@
 <?php
+//TODO check for duplicate entries
 require_once('_lib/User.class.php');
 require_once('_lib/Controller.class.php');
 class Login extends Controller

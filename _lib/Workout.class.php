@@ -4,7 +4,7 @@ require_once('_lib/DB.class.php');
 class Workout
 {
 	private $id;
-	private $is_new = false;
+	public  $is_new = false;
 	private $exercises;
 	private $user;
 	private $name;
@@ -63,32 +63,22 @@ class Workout
 	public function read()
 	{
 		//get the workout name and the exercises associated with the workout id
-		if($this->id < 0)
+	
+		//Will return nothing if the user doesn't own this workout
+		$sql = sprintf("SELECT workout_name FROM workouts WHERE user_id='%s' and id='%s'",$this->user->userid,$this->id);
+		$result = DB::query($sql);
+		if(empty($result))
 		{
-			$this->is_new = true;
-			return;
+			die('Not authorized');
 		}
-		else
+		$this->name = mysql_result($result,0);
+		$sql = sprintf("SELECT * FROM exercises WHERE workout_id='%s'",$this->id);
+		$result = DB::query($sql);
+		while($row = mysql_fetch_assoc($result))
 		{
-			//Will return nothing if the user doesn't own this workout
-			$sql = sprintf("SELECT workout_name FROM workouts WHERE user_id='%s' and id='%s'",$this->user->userid,$this->id);
-			$result = DB::query($sql);
-			if(empty($result))
-			{
-				die('Not authorized');
-			}
-			$this->name = mysql_result($result,0);
-			$sql = sprintf("SELECT * FROM exercises WHERE workout_id='%s'",$this->id);
-			$result = DB::query($sql);
-			while($row = mysql_fetch_assoc($result))
-			{
-				//TODO Limit this so as to not overflow page
-				$this->exercises[] = $row;
-			}
-			
+			//TODO Limit this so as to not overflow page
+			$this->exercises[] = $row;
 		}
-		
-		
 	}
 	public function update()
 	{
