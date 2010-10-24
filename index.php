@@ -12,6 +12,7 @@ $header = '';
 $footer = '';
 $content ='';
 $do = $_GET['do'];
+ob_start();
 if(isset($_SESSION['user']))
 {
 	$user = unserialize($_SESSION['user']);
@@ -25,11 +26,12 @@ else
 		//header('Location: /?do=login');
 	}
 }
+$content .= ob_get_contents();
 switch($do)
 {
 	case 'login':
 		Login::process();
-		$content = Login::renderContent();
+		$content .= Login::renderContent();
 		$styles[] = Login::getStyles();
 		$scripts[] = Login::getScripts();
 	break;
@@ -38,23 +40,25 @@ switch($do)
 	break;
 	case 'design':
 		WorkoutDesign::process();
-		$content = WorkoutDesign::renderContent();
+		$content .= WorkoutDesign::renderContent();
 		$styles[] = WorkoutDesign::getStyles();
 		$scripts[] = WorkoutDesign::getScripts();
 	break;
 	case 'register':
 		Register::process();
 		$styles[] = WorkoutDesign::getStyles();
-		$content = Register::renderContent();
+		$content .= Register::renderContent();
 	break;
 	case 'list':
 		WorkoutListing::process();
-		$content = WorkoutListing::renderContent();
+		$content .= WorkoutListing::renderContent();
 	break;
 	default:
 		echo 'bad';
 	break;
 }
+
+ob_end_clean();
 
 Page::renderPage($styles,$scripts,$header,$content,$footer);
 

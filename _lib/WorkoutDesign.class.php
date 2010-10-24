@@ -8,10 +8,10 @@ class WorkoutDesign extends Controller
 	private static $workout;
 	public static function process()
 	{
-		self::$exercise_forms = array(0=>array());
-
+		$user = unserialize($_SESSION['user']);
 		if(isset($_GET['workout']))
 		{
+			//TODO make sure user has permission to edit this workout
 			$id = $_GET['workout'];
 			self::$workout = new Workout($user,$id);
 			self::$workout->read();
@@ -19,13 +19,13 @@ class WorkoutDesign extends Controller
 		}
 		else
 		{
-			die();
+			self::$workout = new Workout($user);
+			self::$workout->read();
+			self::$exercise_forms = array(0=>array());
 		}
-
 		if(isset($_POST['exercises']))
 		{
 			self::$exercise_forms = $_POST['exercises'];
-			$user = unserialize($_SESSION['user']);
 			//$exercises = array();
 			$invalid_forms = array();
 			foreach(self::$exercise_forms as $id => $exercise_form)
@@ -42,10 +42,14 @@ class WorkoutDesign extends Controller
 			}
 			else
 			{
-				if(self::$workout->get_id()!=-1)
-					self::$workout->update();
-				else
+				if(self::$workout->is_new())
+				{
 					self::$workout->create();
+
+				}
+				else
+					self::$workout->update();
+				//header("Location: ?do=list");
 			}
 			
 		}
@@ -58,6 +62,7 @@ class WorkoutDesign extends Controller
 	{
 		ob_start();
 		$exercise_forms = self::$exercise_forms;
+		print_r($exercise_forms);
 		include '_doc/workout_designer.tpl.php';
 		$content = ob_get_contents();
 		ob_end_clean();

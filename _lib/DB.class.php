@@ -6,8 +6,8 @@ class DB
 	public static function query($sql)
 	{
 		$result = mysql_query($sql,self::$db);
-		echo "Query: $sql <br/>";
-		echo "Result: $result <br/>";
+		debug("<div><ul><li>Query: $sql </li>");
+		debug("<li>Result: $result </li></ul></div>");
 		return $result;
 	}
 	public static function conn()

@@ -18,14 +18,14 @@ class WorkoutList
 	}
 	public function read()
 	{
-		$sql = sprintf("SELECT * FROM workouts WHERE userid='%s'",$this->user->name);
+		//TODO store workouts in session
+		$sql = sprintf("SELECT * FROM workouts WHERE user_id='%s'",$this->user->userid);
 		$result = DB::query($sql);
 		if($result)
 		{
-			$rows = mysql_fetch_assoc($result);
-			foreach($rows as $row)
+			while($row = mysql_fetch_assoc($result))
 			{
-				$this->workouts[] = new Workout($row);
+				$this->workouts[] = $row;
 			}
 		}
 		else

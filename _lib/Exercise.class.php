@@ -20,9 +20,10 @@ class Exercise
 		 $this->weightmin = $weightmin;
 		 $this->weightmax = $weightmax;
 	}
-	public function create()	
+	public function create($id)	
 	{
 		//TODO clean output
+		$this->workout_id = $id;
 		$sql = sprintf("INSERT INTO exercises (workout_id,name,rep_min,rep_max,weight_min,weight_max,number_of_sets) VALUES ('%s','%s','%s','%s','%s','%s','%s')",
 						$this->workout_id,
 						$this->name,
