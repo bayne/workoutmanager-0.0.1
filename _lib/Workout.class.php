@@ -4,8 +4,7 @@ require_once('_lib/DB.class.php');
 class Workout
 {
 	private $id;
-	public  $is_new = false;
-	private $exercises;
+	var $exercises;
 	private $user;
 	private $name;
 	public function __construct($user,$id = -1)
@@ -24,7 +23,7 @@ class Workout
 	}
 	public function is_new()
 	{
-		return $this->is_new;
+		return ($this->id < 0);
 	}
 	public function get_id()
 	{
@@ -81,7 +80,7 @@ class Workout
 		}
 	}
 	public function update()
-	{
+	{	
 		//TODO drops then readds
 		$sql = "DELETE FROM exercises WHERE workout_id='$this->id'";
 		DB::query($sql);

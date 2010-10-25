@@ -1,4 +1,4 @@
-<form action="?do=design&workout=<?php echo self::$workout->get_id();?>" method="post" id="exercise-list">
+<form action="?do=design&save&workout=<?php echo self::$workout->get_id();?>" method="post" id="exercise-list">
 <?php foreach( $exercise_forms as $id => $exercise_form) {?>
 <fieldset class="exercise">
 	<input type="hidden" value="<?php echo $exercise_form['exercise_id'];?>"/>
@@ -22,5 +22,5 @@
 <a id='add-new-exercise'>Add</a>
 <br/>
 <input type="submit" id="save-exercises" />
-<input type="hidden" value="1" id="exercise-count" name="exercise-count"/>
+<input type="hidden" value="<?php echo count(self::$workout->exercises);?>" id="exercise-count" name="exercise-count"/>
 </form>

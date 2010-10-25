@@ -1,5 +1,6 @@
 <?php
 require_once('config.php');
+require_once('_lib/MainPage.class.php');
 require_once('_lib/Login.class.php');
 require_once('_lib/WorkoutDesign.class.php');
 require_once('_lib/Register.class.php');
@@ -54,7 +55,8 @@ switch($do)
 		$content .= WorkoutListing::renderContent();
 	break;
 	default:
-		echo 'bad';
+		MainPage::process();
+		$content .= MainPage::renderContent();
 	break;
 }
 
