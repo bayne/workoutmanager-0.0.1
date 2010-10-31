@@ -25,6 +25,7 @@ class WorkoutList
 		{
 			while($row = mysql_fetch_assoc($result))
 			{
+				//TODO Sanitize
 				$this->workouts[] = $row;
 			}
 		}

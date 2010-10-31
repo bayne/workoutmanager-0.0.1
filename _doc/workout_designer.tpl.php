@@ -1,4 +1,5 @@
 <form action="?do=design&save&workout=<?php echo self::$workout->get_id();?>" method="post" id="exercise-list">
+<input type="text" name="workout_name" value="<?php echo self::$workout->name;?>"/>
 <?php foreach( $exercise_forms as $id => $exercise_form) {?>
 <fieldset class="exercise">
 	<input type="hidden" value="<?php echo $exercise_form['exercise_id'];?>"/>

@@ -6,7 +6,7 @@ class Workout
 	private $id;
 	var $exercises;
 	private $user;
-	private $name;
+	var $name;
 	public function __construct($user,$id = -1)
 	{
 		DB::conn();

@@ -1,1 +1,1 @@
-Login | Register
+<a href="?do=login">Login</a> | <a href="?do=register">Register</a>

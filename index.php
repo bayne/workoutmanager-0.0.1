@@ -9,7 +9,7 @@ require_once('_lib/WorkoutListing.class.php');
 session_start();
 $styles = array();
 $scripts = array('_doc/js/jquery.js');
-$header = '';
+
 $footer = '';
 $content ='';
 $do = $_GET['do'];
@@ -17,17 +17,21 @@ ob_start();
 if(isset($_SESSION['user']))
 {
 	$user = unserialize($_SESSION['user']);
-	echo 'logged in as:'.$user->name;
 }
 else
 {
-	echo 'not logged in';
+	$user = null;
 	if($do != 'login')
 	{
 		//header('Location: /?do=login');
 	}
 }
-$content .= ob_get_contents();
+
+// if(strpos($_SERVER['HTTP_USER_AGENT'],"Android") and !isset($_REQUEST['mobile']))
+// {
+// 	$_GET['mobile'] = '';
+// }
+
 switch($do)
 {
 	case 'login':
@@ -50,9 +54,17 @@ switch($do)
 		$styles[] = WorkoutDesign::getStyles();
 		$content .= Register::renderContent();
 	break;
+	case 'assign':
+		WorkoutAssign::process();
+		$content .= WorkoutAssign::renderContent();
+	break;
 	case 'list':
 		WorkoutListing::process();
 		$content .= WorkoutListing::renderContent();
+	break;
+	case 'workout':
+		Workingout::process();
+		$content .= Workingout::renderContent();
 	break;
 	default:
 		MainPage::process();
@@ -60,6 +72,11 @@ switch($do)
 	break;
 }
 
+ob_end_clean();
+
+ob_start();
+include '_doc/page_start.tpl.php';
+$header = ob_get_contents();
 ob_end_clean();
 
 Page::renderPage($styles,$scripts,$header,$content,$footer);

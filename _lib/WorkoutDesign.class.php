@@ -2,7 +2,7 @@
 require_once('_lib/Controller.class.php');
 require_once('_lib/Workout.class.php');
 require_once('_lib/Validate.class.php');
-
+//TODO add deletion of workouts/exercises
 class WorkoutDesign extends Controller
 {
 	private static $exercise_forms;
@@ -31,6 +31,7 @@ class WorkoutDesign extends Controller
 			$id = $_GET['workout'];
 			self::$workout = new Workout($user,$id);
 			self::$exercise_forms = $_POST['exercises'];
+			self::$workout->name = $_POST['workout_name'];
 			if(empty(self::$exercise_forms))
 			{
 				die("no exercises submitted");
@@ -51,6 +52,7 @@ class WorkoutDesign extends Controller
 			else
 			{
 				self::$workout->exercises = self::$exercise_forms;
+
 				if(self::$workout->is_new())
 					self::$workout->create();
 				else
